@@ -1,30 +1,34 @@
-import pyautogui
-import time
-import webbrowser
-from data import data_code_path
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 
-def print_subjects_by_semester(semester):
-  print(list(data_code_path[semester][1].keys()))
+url_ads = 'https://ads.ifba.edu.br/Semestre-1'
+
+def navigate_materiais(driver):
+  materiais = driver.find_elements(by=By.XPATH, value="//*[contains(text(), 'Material didático')]")
+
+  for i in range(len(materiais)):
+    material = materiais[i]
+    material.click()
+
+    download_materiais()
+
+    driver.get(url_ads)
+    materiais = driver.find_elements(by=By.XPATH, value="//*[contains(text(), 'Material didático')]")
+
+def download_materiais():
+  print("Baixando os materiais...")
 
 def main():
-  url_ads = 'https://ads.ifba.edu.br/'
+  options = Options()
+  # Ative essa opção para rodar em segundo plano
+  options.add_argument("--headless=new")
 
-  semester = 0
-  while semester < 1 or semester > 6:
-    semester = int(input('Digite o número do semestre (1-6): ')) # TODO: Adicionar validação
+  driver = webdriver.Chrome(options=options)
 
-    print('\n')
-    print_subjects_by_semester(semester)
-    print('\n')
-    sub = str(input('Insira o código da disciplina (ou 0 para baixar todas do semestre): ')) # TODO: Adicionar validação
-    
-    if sub == 0:
-      print() # baixar todas
-    
-    else:
-      webbrowser.open(url_ads + 'file' + (data_code_path[semester][1][f'{sub}']))
-      time.sleep(1)
-      pyautogui.press('enter')
+  driver.get(url_ads)
+  navigate_materiais(driver)
+  driver.quit()
 
 if __name__ == "__main__":
   main()
