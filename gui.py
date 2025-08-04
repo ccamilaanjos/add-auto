@@ -1,3 +1,4 @@
+import platform
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QComboBox,
     QPushButton, QMessageBox, QFileDialog
@@ -46,9 +47,12 @@ class DownloaderGUI(QWidget):
 
     def select_download_path(self):
         path = QFileDialog.getExistingDirectory(self, "Selecione a pasta de download")
+        
         if path:
-            self.download_path = path
-            self.path_button.setText(f"Pasta: {path}")
+          if platform.system() == 'Windows':
+              path = path.replace('/', '\\')
+          self.download_path = path
+          self.path_button.setText(f"Pasta: {path}")
 
     def download(self):
         if not self.download_path:
