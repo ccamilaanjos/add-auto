@@ -9,7 +9,7 @@ from data import data_code_path
 class DownloaderGUI(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Disciplina Downloader")
+        self.setWindowTitle("ADS Document Downloader")
         self.resize(450, 250)
         self.url_ads = 'https://ads.ifba.edu.br/'
         self.download_path = ""
