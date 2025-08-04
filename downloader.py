@@ -49,6 +49,7 @@ def navigate_disciplina(driver, url, download_path, target_folder, is_pagination
     except Exception:
       continue
   
+  time.sleep(1)
   wait_for_downloads(download_path, size)
 
   # Mover para targe folder
@@ -89,7 +90,7 @@ def open_semester(url, path, folder):
     "safebrowsing.enabled": False
   }
 
-  # options.add_argument("--headless=new")
+  options.add_argument("--headless=new")
   options.add_experimental_option('prefs', prefs)
 
   driver = webdriver.Chrome(options=options)
