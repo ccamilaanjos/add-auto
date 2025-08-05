@@ -76,7 +76,7 @@ class DownloaderGUI(QWidget):
         self.download_button.setText("Baixando...")
 
         self.worker = DownloadWorker(url, self.download_path, folder)
-        self.worker.finished.connect(self.on_download_finished)
+        self.worker.operation_finished.connect(self.on_download_finished)
         self.worker.error.connect(self.on_download_error)
         self.worker.start()
 
@@ -95,11 +95,11 @@ class DownloaderGUI(QWidget):
     def cleanup_worker(self):
         if hasattr(self, "worker"):
             try:
-                self.worker.finished.disconnect(self.on_download_finished)
+                self.worker.operation_finished.disconnect()
             except TypeError:
                 pass
             try:
-                self.worker.error.disconnect(self.on_download_error)
+                self.worker.error.disconnect()
             except TypeError:
                 pass
  

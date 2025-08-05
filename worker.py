@@ -1,7 +1,8 @@
 from PySide6.QtCore import QThread, Signal
+from downloader import open_semester
 
 class DownloadWorker(QThread):
-    finished = Signal()
+    operation_finished = Signal()
     error = Signal(str)
 
     def __init__(self, url, path, folder):
@@ -12,8 +13,7 @@ class DownloadWorker(QThread):
 
     def run(self):
         try:
-            from downloader import open_semester
             open_semester(self.url, self.path, self.folder)
-            self.finished.emit()
+            self.operation_finished.emit()
         except Exception as e:
             self.error.emit(str(e))
