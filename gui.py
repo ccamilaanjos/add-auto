@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QComboBox,
     QPushButton, QMessageBox, QFileDialog
 )
-from PySide6.QtCore import Qt
 from worker import DownloadWorker
 from data import data_code_path
 
@@ -31,7 +30,7 @@ class DownloaderGUI(QWidget):
         layout.addWidget(self.download_button)
         self.setLayout(layout)
 
-        self.semester_combo.addItems(data_code_path.keys())
+        self.semester_combo.addItems(list(data_code_path.keys()))
         self.semester_combo.currentIndexChanged.connect(self.update_subjects_combo)
         self.download_button.clicked.connect(self.download)
         self.path_button.clicked.connect(self.select_download_path)
@@ -43,7 +42,7 @@ class DownloaderGUI(QWidget):
         self.subject_combo.clear()
         self.subject_combo.addItem("Todas")
         subjects = data_code_path[selected_semester]
-        self.subject_combo.addItems(subjects.keys())
+        self.subject_combo.addItems(list(subjects.keys()))
 
     def select_download_path(self):
         path = QFileDialog.getExistingDirectory(self, "Selecione a pasta de download")
