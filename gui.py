@@ -1,10 +1,11 @@
-import platform
+import platform, os
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QComboBox,
     QPushButton, QMessageBox, QFileDialog
 )
 from worker import DownloadWorker
 from data import data_code_path
+from utils import format_size
 
 class DownloaderGUI(QWidget):
     def __init__(self):
@@ -75,22 +76,41 @@ class DownloaderGUI(QWidget):
         self.download_button.setEnabled(False)
         self.download_button.setText("Baixando...")
 
-        self.worker = DownloadWorker(url, self.download_path, folder)
+        self.worker = DownloadWorker(url, self.download_path, folder, semester)
         self.worker.operation_finished.connect(self.on_download_finished)
         self.worker.error.connect(self.on_download_error)
         self.worker.start()
 
-    def on_download_finished(self):
+    def on_download_finished(self, stats):
         self.cleanup_worker()
         self.download_button.setEnabled(True)
         self.download_button.setText("Baixar")
-        QMessageBox.information(self, "Sucesso", "Download concluído!")
+
+        self.save_download_log(stats)
+
+        QMessageBox.information(self, "Sucesso", "Download concluído")
 
     def on_download_error(self, error_msg):
         self.cleanup_worker()
         self.download_button.setEnabled(True)
         self.download_button.setText("Baixar")
         QMessageBox.critical(self, "Erro", f"Ocorreu um erro: {error_msg}")
+
+    def save_download_log(self, stats):
+        log_file = os.path.join(self.download_path, "download_log.txt")
+
+        summary = f"""
+Semestre: {stats['semester']}
+Disciplina(s): {",".join(stats['subjects'])}
+Data: {stats['date']}
+Hora: {stats['time']}
+Arquivos baixados: {stats['downloaded_files_count']}
+Arquivos ignorados (baixados anteriormente): {stats['skipped_files_count']}
+##############################################
+"""
+
+        with open(log_file, 'a') as f:
+          f.write(summary)
 
     def cleanup_worker(self):
         if hasattr(self, "worker"):

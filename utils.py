@@ -17,6 +17,9 @@ def move(download_path, target_folder):
   os.makedirs(target_folder, exist_ok=True)
 
   for item in os.listdir(download_path):
+    if item == "download_log.txt":
+      continue
+
     base, ext = os.path.splitext(item)
     src_path = os.path.join(download_path, item)
     dst_path = os.path.join(target_folder, item)
