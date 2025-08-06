@@ -5,7 +5,6 @@ from PySide6.QtWidgets import (
 )
 from worker import DownloadWorker
 from data import data_code_path
-from utils import format_size
 
 class DownloaderGUI(QWidget):
     def __init__(self):
