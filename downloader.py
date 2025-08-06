@@ -66,8 +66,8 @@ def navigate_disciplina(driver, url, download_path, target_folder, stats, is_pag
   # Checar paginação
   check_pagination(driver, url, download_path, target_folder, stats)
 
-def wait_for_downloads(download_dir, size):
-  timeout = 60 * (size if size != 0 else 1) 
+def wait_for_downloads(download_dir, downloaded_files_count):
+  timeout = 60 * (downloaded_files_count if downloaded_files_count != 0 else 1) 
 
   seconds = 0
   while seconds < timeout:
@@ -92,6 +92,7 @@ def check_pagination(driver, url, download_path, target_folder, stats):
   
 def open_semester(url, path, folder, semester):
   options = Options()
+
   prefs = {
     "download.default_directory": path,
     "download.prompt_for_download": False,
